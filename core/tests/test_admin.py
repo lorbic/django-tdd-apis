@@ -26,3 +26,10 @@ class AdminDashboardTests(TestCase):
 
         self.assertContains(res, self.user.email)
         self.assertContains(res, self.user.name)
+
+    def test_user_edit_page(self):
+        """Test that use edit page works"""
+        url = reverse('admin:core_user_change', args=[self.user.id])
+        res = self.client.get(url)
+
+        self.assertEqual(res.status_code, 200)
