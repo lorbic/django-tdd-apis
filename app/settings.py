@@ -12,6 +12,7 @@ env = {
     'DEBUG': bool(os.environ.get('ENABLE_DEBUG')),
     'HOSTS': os.environ.get('HOSTS', None),
     'DB': {
+        'EXTERNAL_DB': bool(os.environ.get('DB')),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),
         'NAME': os.environ.get('DB_NAME'),
@@ -83,12 +84,26 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if env['DB']['EXTERNAL_DB']: 
+    # external database (postgres) defined in environment 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': env['DB']['HOST'],
+            'PORT': env['DB']['PORT'],
+            'NAME': env['DB']['NAME'],
+            'USER': env['DB']['USER'],
+            'PASSWORD': env['DB']['PASSWORD']
+        }
     }
-}
+else:
+    # use sqlite db
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
