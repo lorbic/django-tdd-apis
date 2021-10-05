@@ -84,8 +84,8 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if env['DB']['EXTERNAL_DB']: 
-    # external database (postgres) defined in environment 
+if env['DB']['EXTERNAL_DB']:
+    # external database (postgres) defined in environment
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
