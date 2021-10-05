@@ -1,15 +1,41 @@
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+if os.environ.get('ENVIRONMENT', 'dev') == 'dev':
+    from dotenv import load_dotenv
+    load_dotenv()
+
+# SETTING UP ENVIRONMET VARIABLES FOR EASY ACCESS THROUGHOUT THE APPLICATION
+env = {
+    'ENVIRONMENT': os.environ.get('ENVIRONMENT', 'dev'),  # Check for production environment
+    'SECRET_KEY': os.environ.get('SECRET_KEY', '_yw0ks9qv&0(jtvd$6_oguc80h'),
+    'DEBUG': bool(os.environ.get('ENABLE_DEBUG')),
+    'HOSTS': os.environ.get('HOSTS', None),
+    'DB': {
+        'EXTERNAL_DB': bool(os.environ.get('DB')),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD')
+    }
+}
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_yw0ks9qv&0(jtvd$6_oguc80h-9dd)3ka3happbqok8*p(1m$'
+SECRET_KEY = env['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env['DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
+
+# add more hosts without changing the source code
+external_hosts = env['HOSTS']
+if external_hosts is not None:
+    ALLOWED_HOSTS.extend(external_hosts.split('/'))
 
 
 # Application definition
@@ -58,12 +84,26 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if env['DB']['EXTERNAL_DB']:
+    # external database (postgres) defined in environment
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': env['DB']['HOST'],
+            'PORT': env['DB']['PORT'],
+            'NAME': env['DB']['NAME'],
+            'USER': env['DB']['USER'],
+            'PASSWORD': env['DB']['PASSWORD']
+        }
     }
-}
+else:
+    # use sqlite db
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -106,3 +146,9 @@ STATIC_URL = '/static/'
 
 # Setup Custom UserModel
 AUTH_USER_MODEL = 'core.User'
+
+# print all environment variables good for debugging funky behaviour in production
+if bool(os.environ.get('PRINT_ENVIRONMENT_VARIABLES', False)):
+    import pprint
+    pp = pprint.PrettyPrinter(depth=4)
+    pp.pprint(env)

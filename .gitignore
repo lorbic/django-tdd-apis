@@ -29,5 +29,9 @@ target/
 __pycache__/
 local_settings.py
 
+# SYSTEM #
 .env
 db.sqlite3
+exp.*.bat
+# test and run application
+run.bat
