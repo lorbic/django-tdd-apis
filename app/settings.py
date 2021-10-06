@@ -9,7 +9,7 @@ if os.environ.get('ENVIRONMENT', 'dev') == 'dev':
 env = {
     'ENVIRONMENT': os.environ.get('ENVIRONMENT', 'dev'),  # Check for production environment
     'SECRET_KEY': os.environ.get('SECRET_KEY', '_yw0ks9qv&0(jtvd$6_oguc80h'),
-    'DEBUG': bool(os.environ.get('ENABLE_DEBUG')),
+    'DEBUG': bool(os.environ.get('DEBUG')),
     'HOSTS': os.environ.get('HOSTS', None),
     'DB': {
         'EXTERNAL_DB': bool(os.environ.get('DB')),
@@ -142,7 +142,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Extra places for collectstatic to find static files.
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "media"),)
 
 # Setup Custom UserModel
 AUTH_USER_MODEL = 'core.User'
@@ -152,3 +162,5 @@ if bool(os.environ.get('PRINT_ENVIRONMENT_VARIABLES', False)):
     import pprint
     pp = pprint.PrettyPrinter(depth=4)
     pp.pprint(env)
+
+print("DEBUG:", DEBUG)
