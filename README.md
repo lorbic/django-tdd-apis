@@ -1,5 +1,11 @@
 # django-tdd-apis
 
+<div align='center'>
+
+[![Django CI](https://github.com/lorbic/django-tdd-apis/actions/workflows/django.yml/badge.svg)](https://github.com/lorbic/django-tdd-apis/actions/workflows/django.yml)
+
+</div>
+
 Creating APIs with django using Test Driven Development (TDD)
 
 Read `env.template` for _dotenv_ configuration
