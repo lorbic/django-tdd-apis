@@ -10,7 +10,7 @@ class CommandTests(TestCase):
     def test_wait_for_db_ready(self):
         """Test waiting for db setup to become available"""
         with patch('django.db.utils.ConnectionHandler.__getitem__') as gi:
-            ''' 
+            '''
             Mocking the behaviour of default database connection handler
             to be able to use in the test without real database.
             '''
@@ -26,4 +26,3 @@ class CommandTests(TestCase):
             gi.side_effect = [OperationalError] * 5 + [True]
             call_command('wait_for_db')
             self.assertEqual(gi.call_count, 6)
-            
