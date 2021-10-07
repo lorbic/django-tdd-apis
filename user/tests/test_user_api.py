@@ -9,6 +9,7 @@ from rest_framework import status
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
 
+
 def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
@@ -75,7 +76,7 @@ class PublicUserAPITest(TestCase):
 
     def test_create_token_invalid_credentials(self):
         """Test that tocken is not created if invalid credentials are given"""
-        create_user({'email': 'test@lrbc.ml', 'password': 'Test@123'})
+        create_user(**{'email': 'test@lrbc.ml', 'password': 'Test@123'})
         payload = {
             'email': 'test@lrbc.ml',
             'password': 'WrongPass'
