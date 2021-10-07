@@ -37,7 +37,8 @@ class PublicUserAPITest(TestCase):
         """Test creating a user that already exists fails"""
         payload = {
             'email': 'test@lrbc.ml',
-            'password': 'Test@123'
+            'password': 'Test@123',
+            'name': 'Test User'
         }
         create_user(**payload)
 
@@ -49,7 +50,8 @@ class PublicUserAPITest(TestCase):
         """Test check password is not less than 6 characters"""
         payload = {
             'email': 'test@lrbc.ml',
-            'password': 'pw'
+            'password': 'pw',
+            'name': 'Test User'
         }
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -58,4 +60,3 @@ class PublicUserAPITest(TestCase):
             email=payload['email']
         ).exists()
         self.assertFalse(user_exists)
-
