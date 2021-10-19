@@ -118,7 +118,7 @@ class PrivateUserAPITests(TestCase):
     def setUp(self):
         self.user = create_user(
             email='test@lrbc.ml',
-            pasword='Test123',
+            password='Test123',
             name='Test User'
         )
         self.client = APIClient()
