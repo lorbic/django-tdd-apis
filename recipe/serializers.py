@@ -10,5 +10,3 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ('id', 'name')
         read_only_fields = ('id', )
-
-
