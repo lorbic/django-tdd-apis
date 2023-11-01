@@ -1,6 +1,9 @@
 # VSCODE settings
 .vscode/
 
+# virtual environments
+.venv/
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
